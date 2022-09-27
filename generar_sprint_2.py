@@ -4,7 +4,8 @@ from selenium.webdriver.chrome.options import Options
 
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
-
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 import os
 import json
 
@@ -26,7 +27,7 @@ chrome_options = Options()
 #chrome_options.add_argument("--disable-gpu")
 #chrome_options.add_argument("--headless")
 #chrome_options.headless = True
-driver = webdriver.Chrome(executable_path=DRIVER_PATH,options=chrome_options)
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.implicitly_wait(0.5)
 
 

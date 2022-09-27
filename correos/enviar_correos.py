@@ -30,12 +30,18 @@ def enviar_correo(mensaje, asunto, contrasena, emisor, receptor):
 
 
 def main1():
+
     ORIGEN = 'pmomisiontic@gmail.com'
-    DESTINO = 'tomasggrlol@gmail.com'
-    CORREO_TUTOR = ""
+    PRUEBA = 'tomasggrlol@gmail.com'
+    RECTORIA = 'rectoria.misiontic@uis.edu.co'
+    MONITOR = 'misiontic.monitor@uis.edu.co'
+    CORREO_UIS_TUTOR = ""
+    CORREO_PERSONAL_TUTOR = ""
+    CAMILO = "misiontic.prof2@uis.edu.co"
+
     ASUNTO = 'Reporte de conformación de equipos y notas pendientes por calificación para formador'
     CONTRASENA = "gpyosptdqfidkyil"
-    fecha = "29 de agosto de 2022"
+    fecha = "21 de Septiembre de 2022"
 
 
 
@@ -67,7 +73,6 @@ def main1():
         "JORGE ARMANDO RODRIGUEZ HERNANDEZ",
         "LUIS ALBERTO SAURITH ALVARADO",
         "LUIS CARLOS GAMBOA GELVEZ",
-        "OMAR VIVAS CALDERON",
         "OSCAR MAURICIO GONZALEZ GOMEZ",
         "ROGERIO ORLANDO BELTRAN CASTRO",
         "ROY HERNANDO LLAMAS MUNOZ",
@@ -78,16 +83,53 @@ def main1():
         "YHARY ESTEFANIA ARIAS TRILLOS",
     ]
 
-    for i in range(len(formadores)):
+    FORMADORES_CORREO_PERSONAL = [
+        "alexmo14@gmail.com",
+        "osocarbel@gmail.com",
+        "anguerrco@msn.com",
+        "carlospalma_sistemas@hotmail.com",
+        "carapa2000@hotmail.com",
+        "eduardoclaros@gmail.com",
+        "carloshgcastrillon@gmail.com",
+        "cahucadi@gmail.com",
+        "santiago9607b@gmail.com",
+        "drincon.89@gmail.com",
+        "alejandroria.94@gmail.com",
+        "florezdavide@gmail.com",
+        "diego.mantilla.trabajo@gmail.com",
+        "edjuca2@gmail.com",
+        "ingeniero.beto@hotmail.com",
+        "edward_a_ropero@hotmail.com",
+        "gbejarano@gmail.com",
+        "jahir.saavedra@gmail.com",
+        "javierq80@gmail.com",
+        "jhonjairo.cortesp@gmail.com",
+        "Jorge.r@msn.com",
+        "sauriths@gmail.com",
+        "luiscarlosgamboagelvez@gmail.com",
+        "om5@misena.edu.co",
+        "rogeriobeltran@gmail.com",
+        "rhllamas@gmail.com",
+        "smedina_castillo@yahoo.es",
+        "pinilla.nicolas10@gmail.com",
+        "julianamroa@gmail.com",
+        "yesidquintero06@gmail.com",
+        "yharystefa@gmail.com",
+    ]
 
+
+    for i in range(19,len(formadores)):
+        CORREO_PERSONAL_TUTOR = FORMADORES_CORREO_PERSONAL[i]
         for row in pd.DataFrame(frame.query(f'Formador == "{formadores[i]}"')).itertuples():
-            CORREO_TUTOR = row.Email_Formador
+            CORREO_UIS_TUTOR = row.Email_Formador
             break
 
 
-        print(CORREO_TUTOR)
+
         frame_pendientes_por_calificar_s1 = pd.DataFrame(frame.query(f'Formador == "{formadores[i]}" and Estado_S1 == "Pendiente por calificar"')).sort_values("Curso", ascending=True)
         frame_pendientes_por_calificar_s2 = pd.DataFrame(frame.query(f'Formador == "{formadores[i]}" and Estado_S2 == "Pendiente por calificar"')).sort_values("Curso", ascending=True)
+        frame_pendientes_por_calificar_s3 = pd.DataFrame(frame.query(f'Formador == "{formadores[i]}" and Estado_S3 == "Pendiente por calificar"')).sort_values("Curso", ascending=True)
+        frame_pendientes_por_calificar_s4 = pd.DataFrame(frame.query(f'Formador == "{formadores[i]}" and Estado_S4 == "Pendiente por calificar"')).sort_values("Curso", ascending=True)
         frame_pendientes_por_grupo = pd.DataFrame(frame.query(f'Formador == "{formadores[i]}" and Tipo_proyecto == "Sin contestar aún"')).sort_values("Curso", ascending=True)
 
         tabla_pendientes_por_calificacion_s1 = """
@@ -129,6 +171,46 @@ def main1():
             tabla_pendientes_por_calificacion_s2 = "<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No quedan tripulantes pendientes por calificar</p>"
         else:
             tabla_pendientes_por_calificacion_s2 = tabla_pendientes_por_calificacion_s2 + "\b\b\b</table>"
+
+        tabla_pendientes_por_calificacion_s3 = """
+                        <table>
+                          <tr>
+                            <th>Grupo</th>
+                            <th>Estudiante</th>
+                          </tr>
+                          """
+        for row in frame_pendientes_por_calificar_s3.itertuples():
+            tabla_pendientes_por_calificacion_s3 = tabla_pendientes_por_calificacion_s3 + f"""
+                            \b<tr>
+                              \b<td>{row.Curso}</td>
+                              \b<td>{row.Nombre_Tripulante}</td>
+                            \b</tr>
+                            """
+
+        if frame_pendientes_por_calificar_s3.empty:
+            tabla_pendientes_por_calificacion_s3 = "<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No quedan tripulantes pendientes por calificar</p>"
+        else:
+            tabla_pendientes_por_calificacion_s3 = tabla_pendientes_por_calificacion_s3 + "\b\b\b</table>"
+
+        tabla_pendientes_por_calificacion_s4 = """
+                                <table>
+                                  <tr>
+                                    <th>Grupo</th>
+                                    <th>Estudiante</th>
+                                  </tr>
+                                  """
+        for row in frame_pendientes_por_calificar_s4.itertuples():
+            tabla_pendientes_por_calificacion_s4 = tabla_pendientes_por_calificacion_s4 + f"""
+                                    \b<tr>
+                                      \b<td>{row.Curso}</td>
+                                      \b<td>{row.Nombre_Tripulante}</td>
+                                    \b</tr>
+                                    """
+
+        if frame_pendientes_por_calificar_s4.empty:
+            tabla_pendientes_por_calificacion_s4 = "<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No quedan tripulantes pendientes por calificar</p>"
+        else:
+            tabla_pendientes_por_calificacion_s4 = tabla_pendientes_por_calificacion_s4 + "\b\b\b</table>"
 
         tabla_pendientes_por_grupo = """
                 <table>
@@ -194,6 +276,16 @@ def main1():
     
     
     {tabla_pendientes_por_calificacion_s2}
+    
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>SPRINT 3</strong></p>
+    
+    
+    {tabla_pendientes_por_calificacion_s3}
+    
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>SPRINT 4</strong></p>
+    
+    
+    {tabla_pendientes_por_calificacion_s4}
 
     <p><strong>PARTE 2. REPORTE DE TRIPULANTES PENDIENTES DE CONFORMACIÓN DE GRUPOS</strong></p>
     
@@ -212,9 +304,17 @@ def main1():
 </html>
 '''
 
-        enviar_correo(content,ASUNTO, CONTRASENA,ORIGEN,DESTINO)
-        #enviar_correo(content,ASUNTO, CONTRASENA,ORIGEN,CORREO_TUTOR)
-        #enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, "misiontic.prof2@uis.edu.co")
+        enviar_correo(content,ASUNTO, CONTRASENA,ORIGEN,PRUEBA)
+        enviar_correo(content,ASUNTO, CONTRASENA,ORIGEN,CORREO_UIS_TUTOR)
+        enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, CORREO_PERSONAL_TUTOR)
+        enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, CAMILO)
+        if i == 0:
+            enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, MONITOR)
+            enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, RECTORIA)
+
+        print(i,formadores[i], CORREO_PERSONAL_TUTOR, CORREO_UIS_TUTOR)
+
+
 
 
 

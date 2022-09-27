@@ -2,37 +2,43 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
+import json
+import os
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
 
-
-
+BASE_PATH = os.getcwd()
 pathDriver = "C:/Users/TOMASGONZALEZ/chromedriver.exe"
-usuario=1007414252
-contrasena="MisionTIC2022$"
+CREDENTIALS_PATH = BASE_PATH + "/conf/credenciales.json"
+f = open(CREDENTIALS_PATH)
+CREDENTIALS = json.load(f)
+f.close()
 
 wb = Workbook()
-dest_filename = 'sprint_1.xlsx'
+dest_filename = 'sprint_4.xlsx'
 ws1 = wb.active
-ws1.title = "sprint_1"
-ws1.append(["Codigo","Codigo_Id","Nombre_Tripulante", "Estado","Nota_Final","Grupo","Sprint"])
+ws1.title = "sprint_4"
+ws1.append(["Codigo", "Codigo_Id", "Nombre_Tripulante", "Estado", "Nota_Final", "Grupo", "Sprint"])
 
 chrome_options = Options()
-#chrome_options.add_argument("--disable-extensions")
-#chrome_options.add_argument("--disable-gpu")
-#chrome_options.add_argument("--headless")
+# chrome_options.add_argument("--disable-extensions")
+# chrome_options.add_argument("--disable-gpu")
+# chrome_options.add_argument("--headless")
 chrome_options.headless = True
-driver = webdriver.Chrome(executable_path=pathDriver,options=chrome_options)
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.implicitly_wait(0.5)
 
-
-driver.get("https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=37842&action=grading") #O1
-username=driver.find_element(By.ID,"username")
-password=driver.find_element(By.ID,"password")
-login = driver.find_element(By.ID,"loginbtn")
-username.send_keys(usuario)
-password.send_keys(contrasena)
+driver.get("https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=37842&action=grading")  # O1
+username = driver.find_element(By.ID, "username")
+password = driver.find_element(By.ID, "password")
+login = driver.find_element(By.ID, "loginbtn")
+username.send_keys(CREDENTIALS["USER"])
+password.send_keys(CREDENTIALS["PASS"])
 login.click()
+
 
 links_sprint_4 = [
     "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=37903&action=grading",#O1
@@ -97,32 +103,41 @@ links_sprint_4 = [
 
 ]
 
-def read_sprint(links,numeroSprint,driver,hoja_excel):
-
+def read_sprint(links, numeroSprint, driver, hoja_excel):
     for i in range(59):
         contador = 1
         driver.get(links[i])
         flag = True
-        a=4
+        a = 4
         if i == 0:
             a = 5
         while flag == True:
             try:
-                codigo = driver.find_element(By.XPATH,f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[{a}]/table/tbody/tr[{contador}]/td[4]").text
-                codigo_id = driver.find_element(By.XPATH,f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[{a}]/table/tbody/tr[{contador}]/td[5]").text
-                nombre = driver.find_element(By.XPATH,f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[{a}]/table/tbody/tr[{contador}]/td[1]").text
-                estado = driver.find_element(By.XPATH,f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[{a}]/table/tbody/tr[{contador}]/td[6]").text
-                calificacion_final = driver.find_element(By.XPATH,f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[{a}]/table/tbody/tr[{contador}]/td[15]").text
-                #ws1 = wb.active
-                hoja_excel.append([codigo,codigo_id,nombre,estado,calificacion_final,f"O{i+1}",f"s{numeroSprint}"])
-                contador+=1
-            except:
-                print(f"O{i+1} terminado")
-                flag = False
-        
-        
+                codigo = driver.find_element(By.XPATH,
+                                             f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[4]/table/tbody/tr[{contador}]/td[4]").text
+                codigo_id = driver.find_element(By.XPATH,
+                                                f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[4]/table/tbody/tr[{contador}]/td[5]").text
+                nombre = driver.find_element(By.XPATH,
+                                             f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[4]/table/tbody/tr[{contador}]/td[1]").text
+                estado = driver.find_elements(By.XPATH,
+                                              f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[4]/table/tbody/tr[{contador}]/td[6]/div")
+                calificacion_final = driver.find_element(By.XPATH,
+                                                         f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[4]/table/tbody/tr[{contador}]/td[15]").text
+                # ws1 = wb.active
+                for j in range(len(estado)):
+                    if j == 0:
+                        hoja_excel.append([codigo, codigo_id, nombre, estado[j].text, calificacion_final, f"O{i + 1}",
+                                           f"s{numeroSprint}"])
+                    else:
+                        hoja_excel.append(["", "", "", estado[j].text, "", "", ""])
 
-read_sprint(links_sprint_4,4,driver,ws1)
+                contador += 1
+            except:
+                print(f"O{i + 1} terminado")
+                flag = False
+
+
+read_sprint(links_sprint_4, 4, driver, ws1)
 wb.save(dest_filename)
 
 driver.quit()
