@@ -7,6 +7,9 @@ import time
 #variables
 
 def descargar_notas():
+
+    print("\ncore bot 1.0 notas :)\n")
+
     BASE_PATH = os.getcwd()
     DRIVER_PATH = BASE_PATH + "/conf/drivers/chromedriver.exe"
     CREDENTIALS_PATH = BASE_PATH + "/conf/credenciales.json"
@@ -14,27 +17,19 @@ def descargar_notas():
     CREDENTIALS = json.load(f)
     f.close()
     DOWNLOADS_PATH = BASE_PATH + "\\descargas\\notas"
-    #DOWNLOADS_PATH = r"C:\Users\TOMASGONZALEZ\OneDrive - Universidad Industrial de Santander\MinTIC2_Ciclo3 - Archivos de MISION TIC - Coordinador de Proyectos\10in\11dbclt\1100notas\notas_dinamico"
-
 
     options = Options()
     #options.add_argument("--headless")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
     options.add_experimental_option("prefs", {
-      "download.default_directory": DOWNLOADS_PATH 
+      "download.default_directory": DOWNLOADS_PATH
       })
 
-    #set chromodriver.exe path
-    print("\ncore bot 1.0 grupos :)\n")
     driver = webdriver.Chrome(executable_path=DRIVER_PATH, options = options)
-    #implicit wait
     driver.implicitly_wait(0.5)
-    #maximize browser
     driver.maximize_window()
-    #chrome_Options().add_argument("--headless")
 
-    #launch URL
     driver.get("https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=679") #O1
     username=driver.find_element(By.ID,"username")
     password=driver.find_element(By.ID,"password")
@@ -43,68 +38,62 @@ def descargar_notas():
     password.send_keys(CREDENTIALS["PASS"])
     login.click()
 
-
     links = [
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=679", #O1
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=690", #O2
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=692", #O3
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=693", #O4
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=694", #O5
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=695", #O6
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=696", #O7
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=697", #O8
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=698", #O9
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=680", #O10
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=681", #O11
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=682", #O12
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=683", #O13
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=684", #O14
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=685", #O15
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=686", #O16
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=687", #O17
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=688", #O18
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=689", #O19
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=691", #O20
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=529", #O21
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=530", #O22
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=531", #O23
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=532", #O24
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=533", #O25
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=534", #O26
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=535", #O27
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=536", #O28
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=537", #O29
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=518", #O30
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=519", #O31
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=520", #O32
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=521", #O33
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=522", #O34
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=523", #O35
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=524", #O36
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=525", #O37
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=526", #O38
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=527", #O39
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=508", #O40
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=509", #O41
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=510", #O42
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=511", #O43
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=512", #O44
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=513", #O45
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=514", #O46
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=515", #O47
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=516", #O48
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=517", #O49
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=498", #O50
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=499", #O51
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=500", #O52
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=501", #O53
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=502", #O54
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=503", #O55
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=504", #O56
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=505", #O57
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=506", #O58
-"https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=507", #O59
-]
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=812",  # U1
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=823",  # U2
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=824",  # U3
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=825",  # U4
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=826",  # U5
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=827",  # U6
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=828",  # U7
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=829",  # U8
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=830",  # U9
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=813",  # U10
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=814",  # U11
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=815",  # U12
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=816",  # U13
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=817",  # U14
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=818",  # U15
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=819",  # U16
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=820",  # U17
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=821",  # U18
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=822",  # U19
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=831",  # U20
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=832",  # U21
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=833",  # U22
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=834",  # U23
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=835",  # U24
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=836",  # U25
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=837",  # U26
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=838",  # U27
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=839",  # U28
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=840",  # U29
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=841",  # U30
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=842",  # U31
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=843",  # U32
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=844",  # U33
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=845",  # U34
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=846",  # U35
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=847",  # U36
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=848",  # U37
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=849",  # Z1
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=858",  # Z2
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=859",  # Z3
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=860",  # Z4
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=861",  # Z5
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=862",  # Z6
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=863",  # Z7
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=864",  # Z8
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=865",  # Z9
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=850",  # Z10
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=851",  # Z11
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=852",  # Z12
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=853",  # Z13
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=854",  # Z14
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=855",  # Z15
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=856",  # Z16
+        "https://lms.uis.edu.co/mintic2022/grade/export/xls/index.php?id=857"   # Z17
+    ]
 
     for i in range(len(links)):
         driver.get(links[i])
