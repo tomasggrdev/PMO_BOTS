@@ -4,6 +4,9 @@ import pandas as pd
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
+from datetime import date
+
+
 
 
 def enviar_correo(mensaje, asunto, contrasena, emisor, receptor):
@@ -41,17 +44,20 @@ def main1():
 
     ASUNTO = 'Reporte de conformación de equipos y notas pendientes por calificación para formador'
     CONTRASENA = "gpyosptdqfidkyil"
-    fecha = "21 de Septiembre de 2022"
+    today = date.today()
+    meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
+    fecha = f"{today.day} de {meses[today.month - 1 ]} de {today.year}"
 
 
 
-    data = pd.read_excel("Tabla Estado Sprints.xlsx")
+    data = pd.read_excel("Tabla Notas dinamico.xlsx")
     data.columns = [column.replace(" ", "_") for column in data.columns]
     frame = pd.DataFrame(data)
+    frame = frame.fillna("nulo")
+
 
     formadores = [
         "ALEX DAVID MORALES ACOSTA",
-        "CARLOS ADOLFO BELTRAN CASTRO",
         "CARLOS ANDRES GUERRERO ALARCON",
         "CARLOS ANDRES PALMA SUAREZ",
         "CARLOS ARTURO PARRA ORTEGA",
@@ -60,32 +66,29 @@ def main1():
         "CARLOS HUMBERTO CARRENO DIAZ",
         "CARLOS SANTIAGO BENITEZ MALAVER",
         "DANIEL RINCON LEON",
-        "DARIO ALEJANDRO RIANO VELANDIA",
         "DAVID EDUARDO FLOREZ GOMEZ",
         "DIEGO FERNANDO MANTILLA VEGA",
         "EDDINSON JULIAN CARRILLO SISA",
         "EDILBERTO SIERRA MEJIA",
         "EDWARD ALBERTO ROPERO PEREZ",
+        "GERSON JAHIR SANGUINO QUINTERO",
         "GUILLERMO BEJARANO REYES",
         "JAHIR AUGUSTO SAAVEDRA GARCIA",
         "JAVIER ENRIQUE QUINTERO ROJAS",
         "JHON JAIRO CORTES PAREDES",
         "JORGE ARMANDO RODRIGUEZ HERNANDEZ",
         "LUIS ALBERTO SAURITH ALVARADO",
-        "LUIS CARLOS GAMBOA GELVEZ",
         "OSCAR MAURICIO GONZALEZ GOMEZ",
-        "ROGERIO ORLANDO BELTRAN CASTRO",
         "ROY HERNANDO LLAMAS MUNOZ",
-        "SERGIO ARTURO MEDINA CASTILLO",
         "SERGIO NICOLAS PINILLA CANON",
         "SILVIA JULIANA  MORENO ROA",
         "YESID OSWALDO QUINTERO MARTINEZ",
-        "YHARY ESTEFANIA ARIAS TRILLOS",
+
     ]
 
     FORMADORES_CORREO_PERSONAL = [
+
         "alexmo14@gmail.com",
-        "osocarbel@gmail.com",
         "anguerrco@msn.com",
         "carlospalma_sistemas@hotmail.com",
         "carapa2000@hotmail.com",
@@ -93,32 +96,29 @@ def main1():
         "carloshgcastrillon@gmail.com",
         "cahucadi@gmail.com",
         "santiago9607b@gmail.com",
-        "drincon.89@gmail.com",
-        "alejandroria.94@gmail.com",
+        "drincon89@ gmail.com",
         "florezdavide@gmail.com",
-        "diego.mantilla.trabajo@gmail.com",
+        "diegomantill.trabajo @ gmail",
         "edjuca2@gmail.com",
-        "ingeniero.beto@hotmail.com",
+        "ingenierobeto@ hotmail.com",
         "edward_a_ropero@hotmail.com",
+        "gersonsanguino@ gmail.com",
         "gbejarano@gmail.com",
-        "jahir.saavedra@gmail.com",
+        "jahirsaavedra@ gmail.com",
         "javierq80@gmail.com",
-        "jhonjairo.cortesp@gmail.com",
-        "Jorge.r@msn.com",
+        "jhonjairocortesp@ gmail.com",
+        "Jorger@ msn.com",
         "sauriths@gmail.com",
-        "luiscarlosgamboagelvez@gmail.com",
         "om5@misena.edu.co",
-        "rogeriobeltran@gmail.com",
         "rhllamas@gmail.com",
-        "smedina_castillo@yahoo.es",
-        "pinilla.nicolas10@gmail.com",
+        "pinillanicolas10@ gmail.com",
         "julianamroa@gmail.com",
-        "yesidquintero06@gmail.com",
-        "yharystefa@gmail.com",
+        "yesidquintero06@gmail.com"
+
     ]
 
 
-    for i in range(19,len(formadores)):
+    for i in range(len(formadores)):
         CORREO_PERSONAL_TUTOR = FORMADORES_CORREO_PERSONAL[i]
         for row in pd.DataFrame(frame.query(f'Formador == "{formadores[i]}"')).itertuples():
             CORREO_UIS_TUTOR = row.Email_Formador
@@ -130,12 +130,13 @@ def main1():
         frame_pendientes_por_calificar_s2 = pd.DataFrame(frame.query(f'Formador == "{formadores[i]}" and Estado_S2 == "Pendiente por calificar"')).sort_values("Curso", ascending=True)
         frame_pendientes_por_calificar_s3 = pd.DataFrame(frame.query(f'Formador == "{formadores[i]}" and Estado_S3 == "Pendiente por calificar"')).sort_values("Curso", ascending=True)
         frame_pendientes_por_calificar_s4 = pd.DataFrame(frame.query(f'Formador == "{formadores[i]}" and Estado_S4 == "Pendiente por calificar"')).sort_values("Curso", ascending=True)
-        frame_pendientes_por_grupo = pd.DataFrame(frame.query(f'Formador == "{formadores[i]}" and Tipo_proyecto == "Sin contestar aún"')).sort_values("Curso", ascending=True)
+        frame_pendientes_por_grupo = pd.DataFrame(frame.query(f'Formador == "{formadores[i]}" and Tipo_proyecto == "nulo"')).sort_values("Curso", ascending=True)
 
         tabla_pendientes_por_calificacion_s1 = """
         <table>
           <tr>
             <th>Grupo</th>
+            <th>Codigo</th>
             <th>Estudiante</th>
           </tr>
           """
@@ -143,6 +144,7 @@ def main1():
             tabla_pendientes_por_calificacion_s1 = tabla_pendientes_por_calificacion_s1 + f"""
             \b<tr>
               \b<td>{row.Curso}</td>
+              \b<td>{row.Cod_UIS}</td>
               \b<td>{row.Nombre_Tripulante}</td>
             \b</tr>
             """
@@ -156,6 +158,7 @@ def main1():
                 <table>
                   <tr>
                     <th>Grupo</th>
+                    <th>Codigo</th>
                     <th>Estudiante</th>
                   </tr>
                   """
@@ -163,6 +166,7 @@ def main1():
             tabla_pendientes_por_calificacion_s2 = tabla_pendientes_por_calificacion_s2 + f"""
                     \b<tr>
                       \b<td>{row.Curso}</td>
+                      \b<td>{row.Cod_UIS}</td>
                       \b<td>{row.Nombre_Tripulante}</td>
                     \b</tr>
                     """
@@ -176,6 +180,7 @@ def main1():
                         <table>
                           <tr>
                             <th>Grupo</th>
+                            <th>Codigo</th>
                             <th>Estudiante</th>
                           </tr>
                           """
@@ -183,6 +188,7 @@ def main1():
             tabla_pendientes_por_calificacion_s3 = tabla_pendientes_por_calificacion_s3 + f"""
                             \b<tr>
                               \b<td>{row.Curso}</td>
+                              \b<td>{row.Cod_UIS}</td>
                               \b<td>{row.Nombre_Tripulante}</td>
                             \b</tr>
                             """
@@ -196,6 +202,7 @@ def main1():
                                 <table>
                                   <tr>
                                     <th>Grupo</th>
+                                    <th>Codigo</th>
                                     <th>Estudiante</th>
                                   </tr>
                                   """
@@ -203,6 +210,7 @@ def main1():
             tabla_pendientes_por_calificacion_s4 = tabla_pendientes_por_calificacion_s4 + f"""
                                     \b<tr>
                                       \b<td>{row.Curso}</td>
+                                      \b<td>{row.Cod_UIS}</td>
                                       \b<td>{row.Nombre_Tripulante}</td>
                                     \b</tr>
                                     """
@@ -216,6 +224,7 @@ def main1():
                 <table>
                   <tr>
                     <th>Grupo</th>
+                    <th>Codigo</th>
                     <th>Estudiante</th>
                   </tr>
                   """
@@ -224,6 +233,7 @@ def main1():
             tabla_pendientes_por_grupo = tabla_pendientes_por_grupo + f"""
                     \b<tr>
                       \b<td>{row.Curso}</td>
+                      \b<td>{row.Cod_UIS}</td>
                       \b<td>{row.Nombre_Tripulante}</td>
                     \b</tr>
                     """
@@ -305,12 +315,12 @@ def main1():
 '''
 
         enviar_correo(content,ASUNTO, CONTRASENA,ORIGEN,PRUEBA)
-        enviar_correo(content,ASUNTO, CONTRASENA,ORIGEN,CORREO_UIS_TUTOR)
-        enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, CORREO_PERSONAL_TUTOR)
-        enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, CAMILO)
-        if i == 0:
-            enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, MONITOR)
-            enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, RECTORIA)
+        #enviar_correo(content,ASUNTO, CONTRASENA,ORIGEN,CORREO_UIS_TUTOR)
+        #enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, CORREO_PERSONAL_TUTOR)
+        #enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, CAMILO)
+        #if i == 0:
+        #    enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, MONITOR)
+        #    enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, RECTORIA)
 
         print(i,formadores[i], CORREO_PERSONAL_TUTOR, CORREO_UIS_TUTOR)
 
