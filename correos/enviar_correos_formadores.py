@@ -314,13 +314,13 @@ def main1():
 </html>
 '''
 
-        enviar_correo(content,ASUNTO, CONTRASENA,ORIGEN,PRUEBA)
-        #enviar_correo(content,ASUNTO, CONTRASENA,ORIGEN,CORREO_UIS_TUTOR)
-        #enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, CORREO_PERSONAL_TUTOR)
-        #enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, CAMILO)
-        #if i == 0:
-        #    enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, MONITOR)
-        #    enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, RECTORIA)
+        #enviar_correo(content,ASUNTO, CONTRASENA,ORIGEN,PRUEBA)
+        enviar_correo(content,ASUNTO, CONTRASENA,ORIGEN,CORREO_UIS_TUTOR)
+        enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, CORREO_PERSONAL_TUTOR)
+        enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, CAMILO)
+        if i == 0:
+            enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, MONITOR)
+            enviar_correo(content, ASUNTO, CONTRASENA, ORIGEN, RECTORIA)
 
         print(i,formadores[i], CORREO_PERSONAL_TUTOR, CORREO_UIS_TUTOR)
 

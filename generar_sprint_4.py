@@ -1,21 +1,27 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-
-import json
-import os
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
 
+import os
+import json
+
 BASE_PATH = os.getcwd()
-pathDriver = "C:/Users/TOMASGONZALEZ/chromedriver.exe"
 CREDENTIALS_PATH = BASE_PATH + "/conf/credenciales.json"
 f = open(CREDENTIALS_PATH)
 CREDENTIALS = json.load(f)
 f.close()
+
+chrome_options = Options()
+# chrome_options.add_argument("--disable-extensions")
+# chrome_options.add_argument("--disable-gpu")
+# chrome_options.add_argument("--headless")
+# chrome_options.headless = True
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+driver.implicitly_wait(0.5)
 
 wb = Workbook()
 dest_filename = 'sprint_4.xlsx'
@@ -23,15 +29,7 @@ ws1 = wb.active
 ws1.title = "sprint_4"
 ws1.append(["Codigo", "Codigo_Id", "Nombre_Tripulante", "Estado", "Nota_Final", "Grupo", "Sprint"])
 
-chrome_options = Options()
-# chrome_options.add_argument("--disable-extensions")
-# chrome_options.add_argument("--disable-gpu")
-# chrome_options.add_argument("--headless")
-chrome_options.headless = True
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-driver.implicitly_wait(0.5)
-
-driver.get("https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=37842&action=grading")  # O1
+driver.get("https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=48377&action=grading")  # Z1
 username = driver.find_element(By.ID, "username")
 password = driver.find_element(By.ID, "password")
 login = driver.find_element(By.ID, "loginbtn")
@@ -39,105 +37,99 @@ username.send_keys(CREDENTIALS["USER"])
 password.send_keys(CREDENTIALS["PASS"])
 login.click()
 
-
-links_sprint_4 = [
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=37903&action=grading",#O1
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=38089&action=grading",#O2
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=37996&action=grading",#O3
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=38275&action=grading",#O4
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=38182&action=grading",#O5
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=38349&action=grading",#O6
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=38554&action=grading",#O7
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=38740&action=grading",#O8
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=38461&action=grading",#O9
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=38647&action=grading",#O10
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=39391&action=grading",#O11
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=39484&action=grading",#O12
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=39205&action=grading",#O13
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=39298&action=grading",#O14
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=38926&action=grading",#O15
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=39019&action=grading",#O16
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=39112&action=grading",#O17
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=38833&action=grading",#O18
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=39577&action=grading",#O19
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=39763&action=grading",#O20
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=39856&action=grading",#O21
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=39949&action=grading",#O22
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=40042&action=grading",#O23
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=39670&action=grading",#O24
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=40321&action=grading",#O25
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=40414&action=grading",#O26
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=40135&action=grading",#O27
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=40228&action=grading",#O28
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=40507&action=grading",#O29
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=40600&action=grading",#O30
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=40879&action=grading",#O31
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=40693&action=grading",#O32
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=41158&action=grading",#O33
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=40786&action=grading",#O34
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=41251&action=grading",#O35
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=40972&action=grading",#O36
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=41065&action=grading",#O37
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=41344&action=grading",#O38
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=41530&action=grading",#O39
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=41716&action=grading",#O40
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=41623&action=grading",#O41
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=41809&action=grading",#O42
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=42088&action=grading",#O43
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=42274&action=grading",#O44
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=41995&action=grading",#O45
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=41902&action=grading",#O46
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=41437&action=grading",#O47
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=42181&action=grading",#O48
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=42460&action=grading",#O49
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=42367&action=grading",#O50
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=42553&action=grading",#O51
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=42646&action=grading",#O52
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=42739&action=grading",#O53
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=42925&action=grading",#O54
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=42832&action=grading",#O55
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=43018&action=grading",#O56
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=43111&action=grading",#O57
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=43204&action=grading",#O58
-    "https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=43297&action=grading",#O59
-
+links_sprint_1 = [
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=52640&action=grading", 'U1'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=52569&action=grading", 'U2'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=52427&action=grading", 'U3'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=52498&action=grading", 'U4'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=52356&action=grading", 'U5'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=52285&action=grading", 'U6'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=52214&action=grading", 'U7'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=52072&action=grading", 'U8'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=52143&action=grading", 'U9'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=51717&action=grading", 'U10'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=51788&action=grading", 'U11'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=51859&action=grading", 'U12'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=51930&action=grading", 'U13'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=52001&action=grading", 'U14'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=51646&action=grading", 'U15'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=51575&action=grading", 'U16'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=51504&action=grading", 'U17'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=51433&action=grading", 'U18'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=51362&action=grading", 'U19'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=51291&action=grading", 'U20'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=51220&action=grading", 'U21'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=51149&action=grading", 'U22'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=51078&action=grading", 'U23'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=51007&action=grading", 'U24'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=50723&action=grading", 'U25'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=50936&action=grading", 'U26'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=50865&action=grading", 'U27'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=50652&action=grading", 'U28'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=50794&action=grading", 'U29'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=50581&action=grading", 'U30'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=50510&action=grading", 'U31'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=50439&action=grading", 'U32'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=50368&action=grading", 'U33'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=50297&action=grading", 'U34'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=50084&action=grading", 'U35'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=50155&action=grading", 'U36'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=50226&action=grading", 'U37'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=48430&action=grading", 'Z1'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=48628&action=grading", 'Z2'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=48727&action=grading", 'Z3'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=48826&action=grading", 'Z4'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=48529&action=grading", 'Z5'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=48925&action=grading", 'Z6'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=49024&action=grading", 'Z7'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=49123&action=grading", 'Z8'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=49321&action=grading", 'Z9'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=49222&action=grading", 'Z10'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=49915&action=grading", 'Z11'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=49816&action=grading", 'Z12'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=49717&action=grading", 'Z13'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=50014&action=grading", 'Z14'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=49618&action=grading", 'Z15'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=49420&action=grading", 'Z16'],
+    ["https://lms.uis.edu.co/mintic2022/mod/assign/view.php?id=49519&action=grading", 'Z17']
 ]
 
+
 def read_sprint(links, numeroSprint, driver, hoja_excel):
-    for i in range(59):
+    for i in range(len(links)):
         contador = 1
-        driver.get(links[i])
+        driver.get(links[i][0])
         flag = True
-        a = 4
-        if i == 0:
-            a = 5
+
         while flag == True:
             try:
+
                 codigo = driver.find_element(By.XPATH,
                                              f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[4]/table/tbody/tr[{contador}]/td[4]").text
                 codigo_id = driver.find_element(By.XPATH,
                                                 f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[4]/table/tbody/tr[{contador}]/td[5]").text
                 nombre = driver.find_element(By.XPATH,
-                                             f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[4]/table/tbody/tr[{contador}]/td[1]").text
+                                             f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[4]/table/tbody/tr[{contador}]/td[3]").text
                 estado = driver.find_elements(By.XPATH,
                                               f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[4]/table/tbody/tr[{contador}]/td[6]/div")
                 calificacion_final = driver.find_element(By.XPATH,
                                                          f"/html/body/div[1]/div[2]/div[5]/div[3]/div[2]/div/div/div/div/div/div[3]/div[4]/table/tbody/tr[{contador}]/td[15]").text
                 # ws1 = wb.active
+
                 for j in range(len(estado)):
                     if j == 0:
-                        hoja_excel.append([codigo, codigo_id, nombre, estado[j].text, calificacion_final, f"O{i + 1}",
+                        hoja_excel.append([codigo, codigo_id, nombre, estado[j].text, calificacion_final, links[i][1],
                                            f"s{numeroSprint}"])
                     else:
                         hoja_excel.append(["", "", "", estado[j].text, "", "", ""])
 
                 contador += 1
             except:
-                print(f"O{i + 1} terminado")
+                print(f"{links[i][1]} terminado")
                 flag = False
 
 
-read_sprint(links_sprint_4, 4, driver, ws1)
+read_sprint(links_sprint_1, 4, driver, ws1)
 wb.save(dest_filename)
 
 driver.quit()
